@@ -72,6 +72,13 @@ For details of individual platforms source contains the respective folder
     /HelloWorldScene.cpp            => Implementation of HelloWorldScene
 
 /android
+    /Android.mk                     => The file, you will require to add paths for include and compilation
+    /com
+        /easyndk
+            /EasyNDK.java               => A sample Cocos2dx Activity to show the sample of message passing with Java and C++
+            /classes
+                /AndroidNDKHelper.java  => Java implementation of NDKHelper
+                /NDKMessage.java        => A sample class to contain the NDKMessage to transfer to C++
     
 
 /IOSNDKHelper
