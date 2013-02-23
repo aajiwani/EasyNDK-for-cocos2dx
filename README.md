@@ -22,31 +22,36 @@ A.) It works on a protocol which is simple to be understood. In any particular e
     the reciever that can listen messages sent from C++. Second, remaining on a particular CCNode in Cocos2dx C++ file,
     register global selectors that will respond to NDK calls from native platform, for the ease of use i have used
     groups. So that on leaving that particular scene of layer or at any instance you can remove the whole group,
-    instead of deleting each item individually. After the above requirements are met, simply compose CCObject* that is
+    instead of deleting each item individually. After the above requirements are met, simply compose CCObject that is
     CCDictionary from C++ as parameters to be sent and a string that would contain the name of the method sent to native
     platform. In the native platform you can simply have method names exactly like the message you sent for the simplicity.
     You will get the native type of parameters that is NSDictionary* in iOS and JSONObject in Android. Similarly you can
     pass a message from native to C++ platform, by composing a NSDictionary or JSONObject with a method name, this method
     name would be checked for the selector string that you have already registered with, and on C++ you will get hit on
-    that selector once the message occurs. You will get CCDictionary* in C++ environment.
+    that selector once the message occurs. You will get CCDictionary in C++ environment.
 
 
 Diagram :
+
+```
 
                 ==>                  ==> Communication Loop             ==>    Remove C++
 Assign          ==>     C++          ==> C++ -> Native (Message)        ==> Selector Groups
 Native Reciever ==> Assign Selectors ==> Native Method Call             ==>
                 ==> In Groups        ==> Native -> C++ (Message)        ==>  Remove Native
                 ==>                  ==> C++ Selector Call (Cocos2dx)   ==>    Reciever
+```
                 
                 
 Under the hood, when you pass a message either from C++ or Native, the message is converted to a JSON string using a C
 Library namely Jansson (http://www.digip.org/jansson/), licensed under MIT. There are helper method written to convert 
-the data from CCDictionary* to JSON and from JSON to CCDictionary*.
+the data from CCDictionary to JSON and from JSON to CCDictionary.
 
 This is the basics of how this helper works.
 
 For details of individual platforms source contains the respective folder
+
+```
 
 /jansson                            => Contains the C Library Jansson (http://www.digip.org/jansson/)
 
@@ -71,3 +76,4 @@ For details of individual platforms source contains the respective folder
     /IOSNDKHelper-C-Interface.h     => C header for IOS to attach a reciever and send message to C++
     /IOSNDKHelper.h                 => Objective C wrapper for NDKHelper in iOS
     /IOSNDKHelper.mm                => Implementation of IOSNDKHelper
+```
