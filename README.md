@@ -29,3 +29,45 @@ A.) It works on a protocol which is simple to be understood. In any particular e
     pass a message from native to C++ platform, by composing a NSDictionary or JSONObject with a method name, this method
     name would be checked for the selector string that you have already registered with, and on C++ you will get hit on
     that selector once the message occurs. You will get CCDictionary* in C++ environment.
+
+
+Diagram :
+
+                ==>                  ==> Communication Loop             ==>    Remove C++
+Assign          ==>     C++          ==> C++ -> Native (Message)        ==> Selector Groups
+Native Reciever ==> Assign Selectors ==> Native Method Call             ==>
+                ==> In Groups        ==> Native -> C++ (Message)        ==>  Remove Native
+                ==>                  ==> C++ Selector Call (Cocos2dx)   ==>    Reciever
+                
+                
+Under the hood, when you pass a message either from C++ or Native, the message is converted to a JSON string using a C
+Library namely Jansson (http://www.digip.org/jansson/), licensed under MIT. There are helper method written to convert 
+the data from CCDictionary* to JSON and from JSON to CCDictionary*.
+
+This is the basics of how this helper works.
+
+For details of individual platforms source contains the respective folder
+
+/jansson                            => Contains the C Library Jansson (http://www.digip.org/jansson/)
+
+/NDKHelper
+    /NDKCallbackNode.h              => C++ Class, to work as a node, that contains selector info that would be assigned from C++ to the global space
+    /NDKCallbackNode.cpp            => Implementation of NDKCallbackNode
+    /NDKHelper.h                    => Main NDKHelper class for to send and recieve messages from and to C++, for iOS and Android currently
+    /NDKHelper.cpp                  => Implementation of NDKHelper
+    
+/ios
+    /RootViewController.h           => Sample ios controller to recieve and send messages to C++
+    /RootViewController.mm          => Implementation of RootViewController
+    
+/Classes
+    /HelloWorldScene.h              => A basic scene from cocos2dx sample, including a selector to respond to native environment message
+    /HelloWorldScene.cpp            => Implementation of HelloWorldScene
+
+/android
+    
+
+/IOSNDKHelper
+    /IOSNDKHelper-C-Interface.h     => C header for IOS to attach a reciever and send message to C++
+    /IOSNDKHelper.h                 => Objective C wrapper for NDKHelper in iOS
+    /IOSNDKHelper.mm                => Implementation of IOSNDKHelper
