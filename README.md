@@ -79,3 +79,16 @@ For details of individual platforms source contains the respective folder
     /IOSNDKHelper.h                 => Objective C wrapper for NDKHelper in iOS
     /IOSNDKHelper.mm                => Implementation of IOSNDKHelper
 ```
+
+Sample Scenario :
+
+```
+You are working on a game which have a submit score button, now you are using game center on ios and someother third party
+tool on android. If you will write your NDK code you might need to write it seperately and with many #if checks, from the 
+above made protocol, you can simply issue a message of submitting score and send score as a parameter, and on different 
+platforms ios and android write respectively different codes to handle it (Objc and Java). You simply have to watch for 
+a specific message on both platforms. And with the above library you can do it without any hassle. Publishing builds on
+different platforms would become breeze.
+
+Try It, and comment. Please do let me know what this library can be improved. Thankyou.
+```
