@@ -18,6 +18,7 @@ Currenty, I am not parsing dates in json. Current parser is ok to parse, diction
 
 
 Q.) How it works ?
+```
 A.) It works on a protocol which is simple to be understood. In any particular environment, on init of it, specify
     the reciever that can listen messages sent from C++. Second, remaining on a particular CCNode in Cocos2dx C++ file,
     register global selectors that will respond to NDK calls from native platform, for the ease of use i have used
@@ -29,6 +30,7 @@ A.) It works on a protocol which is simple to be understood. In any particular e
     pass a message from native to C++ platform, by composing a NSDictionary or JSONObject with a method name, this method
     name would be checked for the selector string that you have already registered with, and on C++ you will get hit on
     that selector once the message occurs. You will get CCDictionary in C++ environment.
+```
 
 
 Diagram :
