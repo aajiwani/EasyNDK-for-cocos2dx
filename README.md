@@ -1,6 +1,8 @@
 EasyNDK-for-cocos2dx
 ====================
 
+Wiki Link : http://cocos2d-x.org/projects/cocos2d-x/wiki/EasyNDK
+
 NDK in cocos2dx is a problem, most of the developers don't want that pain to slow down there process of game making.
 While i wanted to port a game made on cocos2dx from iOS to Android it did without any mess, but when it came to
 working with native features like GameCenter on iOS and AppCircle for Android(Amazon) it was a pain to write 
