@@ -2,6 +2,7 @@ EasyNDK-for-cocos2dx
 ====================
 
 Wiki Link : http://cocos2d-x.org/projects/cocos2d-x/wiki/EasyNDK
+Chart boost Integration Guide : http://ideasrefactored.wordpress.com/2013/03/02/chartboost-integration-in-cocos2dx-game-2/
 
 NDK in cocos2dx is a problem, most of the developers don't want that pain to slow down there process of game making.
 While i wanted to port a game made on cocos2dx from iOS to Android it did without any mess, but when it came to
