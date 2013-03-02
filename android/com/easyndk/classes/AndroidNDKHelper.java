@@ -1,11 +1,3 @@
-//
-//  AndroidNDKHelper.java
-//  EasyNDK-for-cocos2dx
-//
-//  Created by Amir Ali Jiwani on 23/02/2013.
-//
-//
-
 package com.easyndk.classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -88,7 +80,16 @@ public class AndroidNDKHelper
 				if (obj.has(__CALLED_METHOD__))
 				{
 					String methodName = obj.getString(__CALLED_METHOD__);
-					JSONObject methodParams = obj.getJSONObject(__CALLED_METHOD_PARAMS__);
+					JSONObject methodParams = null;
+					
+					try
+					{
+						methodParams = obj.getJSONObject(__CALLED_METHOD_PARAMS__);
+					}
+					catch (JSONException e)
+					{
+						// if we are finding trouble in looking for params, params might be null
+					}
 					
 					try
 					{
