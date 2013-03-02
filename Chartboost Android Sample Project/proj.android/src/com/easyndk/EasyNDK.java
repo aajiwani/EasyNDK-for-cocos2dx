@@ -45,8 +45,8 @@ public class EasyNDK extends Cocos2dxActivity
         // Configure chartboost
         this.cb = Chartboost.sharedChartboost();
         
-        String appId = "51313fe617ba47b178000045";
-        String appSignature = "f9c58a18fb813c038effd38da53cca1c9d5c8dd5";
+        String appId = "Your-App-Id";
+        String appSignature = "Your-App-Signature";
         
         this.cb.onCreate(this, appId, appSignature, null);
         
