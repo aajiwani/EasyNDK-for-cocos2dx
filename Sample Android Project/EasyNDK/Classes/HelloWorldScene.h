@@ -1,3 +1,11 @@
+//
+//  HelloWorldScene.h
+//  EasyNDK-for-cocos2dx
+//
+//  Created by Amir Ali Jiwani on 23/02/2013.
+//
+//
+
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
@@ -14,12 +22,18 @@ public:
     
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
+    
+    // a selector callback
+    void menuNextCallback(CCObject* pSender);
 
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(HelloWorld);
     
     // Sample Selector
     void SampleSelector(CCNode *sender, void *data);
+    
+    // Sample Selector With Data
+    void SampleSelectorWithData(CCNode *sender, void *data);
     
     ~HelloWorld();
 };

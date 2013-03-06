@@ -48,6 +48,50 @@ public class EasyNDK extends Cocos2dxActivity
         AndroidNDKHelper.SetNDKReciever(this);
     }
     
+    public void SampleSelectorWithData(JSONObject prms)
+    {
+    	Log.v("SampleSelector", "purchase something called");
+    	Log.v("SampleSelector", "Passed params are : " + prms.toString());
+    	
+    	String CPPFunctionToBeCalled = null;
+		try
+		{
+			CPPFunctionToBeCalled = prms.getString("to_be_called");
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This is a sample popup on Android").
+        setTitle("Hello World!").
+        setNeutralButton("OK", null).show();
+        
+        String jsonStr = "{\"sample_dictionary\":{\"sample_array\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\"],\"sample_integer\":1234,\"sample_float\":12.34,\"sample_string\":\"a string\"}}";
+        JSONObject prmsToSend = null;
+        
+        try
+        {
+			prmsToSend = new JSONObject(jsonStr);
+		}
+        catch (JSONException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        if (prmsToSend != null)
+        {
+        	AndroidNDKHelper.SendMessageWithParameters(CPPFunctionToBeCalled, prmsToSend);
+        }
+        else
+        {
+        	AndroidNDKHelper.SendMessageWithParameters(CPPFunctionToBeCalled, null);
+        }
+    }
+    
     public void SampleSelector(JSONObject prms)
     {
     	Log.v("SampleSelector", "purchase something called");

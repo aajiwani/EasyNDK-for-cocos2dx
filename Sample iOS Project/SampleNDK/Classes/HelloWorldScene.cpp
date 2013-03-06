@@ -50,10 +50,22 @@ bool HelloWorld::init()
                                         "CloseSelected.png",
                                         this,
                                         menu_selector(HelloWorld::menuCloseCallback) );
+    
+    // add a "play" icon to simulate a data passing example
+    CCMenuItemImage *pNextItem = CCMenuItemImage::create(
+                                        "play.png",
+                                        "play.png",
+                                        this,
+                                        menu_selector(HelloWorld::menuNextCallback)
+                                            );
+    
     pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
+    
+    // Adjust Chartboost button
+    pNextItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 80, 20) );
 
     // create menu, it's an autorelease object
-    CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
+    CCMenu* pMenu = CCMenu::create(pCloseItem, pNextItem, NULL);
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
 
@@ -105,10 +117,62 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
     SendMessageWithParams(string("SampleSelector"), prms);
 }
 
+void HelloWorld::menuNextCallback(CCObject* pSender)
+{
+    // Register a selector in a global space
+    // So that when our native environment will call the method with the string
+    // It can respond to the selector
+    // Note : Group name is there for ease of removing the selectors
+    NDKHelper::AddSelector("HelloWorldSelectors",
+                           "SampleSelectorWithData",
+                           callfuncND_selector(HelloWorld::SampleSelectorWithData),
+                           this);
+    
+    // Making parameters for message to be passed to native language
+    // For the ease of use, i am sending the method to be called name from C++
+    CCDictionary* prms = CCDictionary::create();
+    prms->setObject(CCString::create("SampleSelectorWithData"), "to_be_called");
+    
+    // Finally call the native method in current environment
+    SendMessageWithParams(string("SampleSelectorWithData"), prms);
+}
+
 // A selector that will respond to us, when native language will call it
 void HelloWorld::SampleSelector(CCNode *sender, void *data)
 {
     CCLog("Called from native environment");
+}
+
+// A selector with data that will respond to us, when native language will call it
+void HelloWorld::SampleSelectorWithData(CCNode *sender, void *data)
+{
+    CCLog("Called from native environment");
+    
+    if (data != NULL)
+    {
+        CCDictionary *convertedData = (CCDictionary *)data;
+        
+        CCDictionary *sampleDictionary = (CCDictionary *)convertedData->objectForKey("sample_dictionary");
+        CCArray *sampleArray = (CCArray *)sampleDictionary->objectForKey("sample_array");
+        
+        CCLog("Printing Array in Dictionary");
+        
+        for (int i = 0; i < sampleArray->count(); i++)
+        {
+            CCString* str = (CCString *)sampleArray->objectAtIndex(i);
+            CCLog(str->getCString());
+        }
+            
+        CCString* sampleInteger = (CCString*)sampleDictionary->objectForKey("sample_integer");
+        
+        CCString* sampleFloat = (CCString*)sampleDictionary->objectForKey("sample_float");
+        
+        CCString* sampleString = (CCString*)sampleDictionary->objectForKey("sample_string");
+        
+        CCLog("Printing Integer : %d", sampleInteger->intValue());
+        CCLog("Printing Float : %.3f", sampleFloat->floatValue());
+        CCLog("Printing String : %s", sampleString->getCString());
+    }
 }
 
 HelloWorld::~HelloWorld()

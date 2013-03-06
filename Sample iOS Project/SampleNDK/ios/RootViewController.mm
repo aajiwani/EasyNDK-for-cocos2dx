@@ -88,4 +88,44 @@
     [IOSNDKHelper SendMessage:CPPFunctionToBeCalled WithParameters:nil];
 }
 
+- (void) SampleSelectorWithData:(NSObject *)prms
+{
+    NSLog(@"purchase something called");
+    NSDictionary *parameters = (NSDictionary*)prms;
+    NSLog(@"Passed params are : %@", parameters);
+    
+    // Fetching the name of the method to be called from Native to C++
+    // For a ease of use, i have passed the name of method from C++
+    NSString* CPPFunctionToBeCalled = (NSString*)[parameters objectForKey:@"to_be_called"];
+    
+    // Show a bogus pop up here
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Hello World!"
+                                                      message:@"This is a sample popup on iOS"
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    [message show];
+    
+    // Lets create a sample data to be passed to C++, and there we will fetch the data
+    NSString *jsonStr = @"{\"sample_dictionary\":{\"sample_array\":[\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\"],\"sample_integer\":1234,\"sample_float\":12.34,\"sample_string\":\"a string\"}}";
+    
+    NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *e = nil;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:nil error:&e];
+    
+    // Send C++ a message with paramerts
+    // C++ will recieve this message, only if the selector list will have a method
+    // with the string we are passing
+    if (e != nil)
+    {
+        // If encountered some error, then don't pass the params
+        [IOSNDKHelper SendMessage:CPPFunctionToBeCalled WithParameters:nil];
+    }
+    else
+    {
+        // Else lets try passing parameters from here
+        [IOSNDKHelper SendMessage:CPPFunctionToBeCalled WithParameters:dict];
+    }
+}
+
 @end

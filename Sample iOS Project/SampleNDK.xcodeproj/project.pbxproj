@@ -220,6 +220,7 @@
 		B908C75816D92D6F00903563 /* NDKCallbackNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B908C74616D92D6F00903563 /* NDKCallbackNode.cpp */; };
 		B908C75916D92D6F00903563 /* NDKHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B908C74916D92D6F00903563 /* NDKHelper.cpp */; };
 		B908C76416D939E300903563 /* IOSNDKHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B908C76316D939E300903563 /* IOSNDKHelper.mm */; };
+		B9616B6416E7BA660043AA4E /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = B9616B6316E7BA660043AA4E /* play.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -687,6 +688,7 @@
 		B908C76116D939E300903563 /* IOSNDKHelper-C-Interface.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = "IOSNDKHelper-C-Interface.h"; sourceTree = "<group>"; };
 		B908C76216D939E300903563 /* IOSNDKHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSNDKHelper.h; sourceTree = "<group>"; };
 		B908C76316D939E300903563 /* IOSNDKHelper.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = IOSNDKHelper.mm; sourceTree = "<group>"; };
+		B9616B6316E7BA660043AA4E /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = play.png; path = Resources/play.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -759,6 +761,7 @@
 		B908C48316D91F2B00903563 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B9616B6316E7BA660043AA4E /* play.png */,
 				B908C48416D91F2B00903563 /* CloseNormal.png */,
 				B908C48616D91F2B00903563 /* CloseSelected.png */,
 				B908C48816D91F2B00903563 /* Default.png */,
@@ -1705,6 +1708,7 @@
 				B908C49716D91F2B00903563 /* Icon@2x.png in Resources */,
 				B908C49916D91F2B00903563 /* iTunesArtwork in Resources */,
 				B908C52B16D91F2C00903563 /* ChangeLog in Resources */,
+				B9616B6416E7BA660043AA4E /* play.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2036,6 +2040,7 @@
 				B908C72A16D91F3100903563 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
