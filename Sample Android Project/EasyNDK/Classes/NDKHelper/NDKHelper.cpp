@@ -49,7 +49,8 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
     
     if (json_is_object(obj))
     {
-        CCDictionary *dictionary = CCDictionary::create();
+        CCDictionary *dictionary = new CCDictionary();
+        //CCDictionary::create();
         
         const char *key;
         json_t *value;
@@ -60,7 +61,7 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
             key = json_object_iter_key(iter);
             value = json_object_iter_value(iter);
             
-            dictionary->setObject(NDKHelper::GetCCObjectFromJson(value), string(key));
+            dictionary->setObject(NDKHelper::GetCCObjectFromJson(value)->autorelease(), string(key));
             
             iter = json_object_iter_next(obj, iter);
         }
@@ -70,11 +71,12 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
     else if (json_is_array(obj))
     {
         size_t sizeArray = json_array_size(obj);
-        CCArray *array = CCArray::createWithCapacity(sizeArray);
+        CCArray *array = new CCArray();
+        //CCArray::createWithCapacity(sizeArray);
         
         for (unsigned int i = 0; i < sizeArray; i++)
         {
-            array->addObject(NDKHelper::GetCCObjectFromJson(json_array_get(obj, i)));
+            array->addObject(NDKHelper::GetCCObjectFromJson(json_array_get(obj, i))->autorelease());
         }
         
         return array;
@@ -87,7 +89,8 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
         else if (json_is_false(obj))
             str << false;
         
-        CCString *ccString = CCString::create(str.str());
+        CCString *ccString = new CCString(str.str());
+        //CCString::create(str.str());
         return ccString;
     }
     else if (json_is_integer(obj))
@@ -95,7 +98,8 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
         stringstream str;
         str << json_integer_value(obj);
         
-        CCString *ccString = CCString::create(str.str());
+        CCString *ccString = new CCString(str.str());
+        //CCString::create(str.str());
         return ccString;
     }
     else if (json_is_real(obj))
@@ -103,7 +107,8 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
         stringstream str;
         str << json_real_value(obj);
         
-        CCString *ccString = CCString::create(str.str());
+        CCString *ccString = new CCString(str.str());
+        //CCString::create(str.str());
         return ccString;
     }
     else if (json_is_string(obj))
@@ -111,7 +116,8 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
         stringstream str;
         str << json_string_value(obj);
         
-        CCString *ccString = CCString::create(str.str());
+        CCString *ccString = new CCString(str.str());
+        //CCString::create(str.str());
         return ccString;
     }
     
@@ -189,6 +195,9 @@ void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
             CCFiniteTimeAction* action = CCSequence::create(CCCallFuncND::create(target, sel, (void*)dataToPass), NULL);
             
             target->runAction(action);
+            
+            if (dataToPass != NULL)
+                dataToPass->autorelease();
             break;
         }
     }
