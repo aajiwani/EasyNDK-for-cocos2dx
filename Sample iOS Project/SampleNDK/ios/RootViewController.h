@@ -14,5 +14,7 @@
 }
 
 - (void) SampleSelector:(NSObject *)prms;
+- (void) addButton;
+- (void) ChangeSomethingInCocos;
 
 @end

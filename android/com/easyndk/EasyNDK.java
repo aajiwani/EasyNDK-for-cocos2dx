@@ -38,7 +38,29 @@ public class EasyNDK extends Cocos2dxActivity
 	static
 	{
         System.loadLibrary("game");
-   }
+    }
+    
+    private void AddButton()
+    {
+        Button tapButton = new Button(this);
+        tapButton.setText("Tap to change text");
+        tapButton.setLayoutParams(new LayoutParams(
+                                                   ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                   ViewGroup.LayoutParams.WRAP_CONTENT)
+                                  );
+        
+        tapButton.setOnClickListener(new OnClickListener()
+        {
+			@Override
+			public void onClick(View v)
+			{
+				// TODO Auto-generated method stub
+				EasyNDK.this.ChangeSomethingInCocos();
+			}
+		});
+        
+        this.GetRootView().addView(tapButton);
+    }
 	
     /** Called when the activity is first created. */
     @Override
@@ -46,6 +68,24 @@ public class EasyNDK extends Cocos2dxActivity
     {
         super.onCreate(savedInstanceState);
         AndroidNDKHelper.SetNDKReciever(this);
+        this.AddButton();
+    }
+    
+    public void ChangeSomethingInCocos()
+    {
+        // If you want to change anything that cocos handles, please run it on GLThread
+        // Because cocos is a non threaded environment, it is required to queue stuff there
+        // Every call on NDK opens up a new thread, hence making inconsistency in cocos and NDK
+        
+    	this.runOnGLThread(new Runnable()
+                           {
+			@Override
+			public void run()
+			{
+				// TODO Auto-generated method stub
+				AndroidNDKHelper.SendMessageWithParameters("ChangeLabelSelector", null);
+			}
+		});
     }
     
     public void SampleSelector(JSONObject prms)

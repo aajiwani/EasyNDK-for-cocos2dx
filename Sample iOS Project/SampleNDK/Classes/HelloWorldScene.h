@@ -13,6 +13,9 @@
 
 class HelloWorld : public cocos2d::CCLayer
 {
+private :
+    cocos2d::CCLabelTTF* pLabel;
+    
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
     virtual bool init();
@@ -34,6 +37,9 @@ public:
     
     // Sample Selector With Data
     void SampleSelectorWithData(CCNode *sender, void *data);
+    
+    // Sample Selector to change Label
+    void ChangeLabelSelector(CCNode* sender, void *data);
     
     ~HelloWorld();
 };

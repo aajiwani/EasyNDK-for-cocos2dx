@@ -22,6 +22,9 @@
         // Tell NDKHelper that RootViewController will respond to messages
         // Coming from C++
         [IOSNDKHelper SetNDKReciever:self];
+        
+        // Add a button to screen after a delay
+        [self performSelector:@selector(addButton) withObject:nil afterDelay:3.0f];
     }
     return self;
 }
@@ -86,6 +89,22 @@
     // C++ will recieve this message, only if the selector list will have a method
     // with the string we are passing
     [IOSNDKHelper SendMessage:CPPFunctionToBeCalled WithParameters:nil];
+}
+
+// Adds a button on main screen
+- (void) addButton
+{
+    UIButton *tapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [tapButton setTitle:@"Tap to change text" forState:UIControlStateNormal];
+    [tapButton addTarget:self action:@selector(ChangeSomethingInCocos) forControlEvents:UIControlEventTouchUpInside];
+    tapButton.frame = CGRectMake(0, 150, 150, 80);
+    
+    [self.view addSubview:tapButton];
+}
+
+- (void) ChangeSomethingInCocos
+{
+    [IOSNDKHelper SendMessage:@"ChangeLabelSelector" WithParameters:nil];
 }
 
 @end

@@ -62,16 +62,16 @@ bool HelloWorld::init()
 
     // add a label shows "Hello World"
     // create and initialize a label
-    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Thonburi", 34);
+    this->pLabel = CCLabelTTF::create("Hello World", "Thonburi", 34);
 
     // ask director the window size
     CCSize size = CCDirector::sharedDirector()->getWinSize();
 
     // position the label on the center of the screen
-    pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
+    this->pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
 
     // add the label as a child to this layer
-    this->addChild(pLabel, 1);
+    this->addChild(this->pLabel, 1);
 
     // add "HelloWorld" splash screen"
     CCSprite* pSprite = CCSprite::create("HelloWorld.png");
@@ -82,7 +82,19 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(pSprite, 0);
     
+    // Adds a selector association to be called from native end
+    NDKHelper::AddSelector("HelloWorldSelectors",
+                           "ChangeLabelSelector",
+                           callfuncND_selector(HelloWorld::ChangeLabelSelector),
+                           this);
+    
     return true;
+}
+
+// Selector that will change the label text
+void HelloWorld::ChangeLabelSelector(CCNode* sender, void *data)
+{
+    this->pLabel->setString("World Changed!");
 }
 
 void HelloWorld::menuCloseCallback(CCObject* pSender)
