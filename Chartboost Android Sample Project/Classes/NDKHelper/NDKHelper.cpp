@@ -189,7 +189,10 @@ void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
         if (NDKHelper::selectorList[i].getName().compare(methodNameStr) == 0)
         {
             CCObject *dataToPass = NDKHelper::GetCCObjectFromJson(methodParams);
-            dataToPass->retain();
+            
+            if (dataToPass != NULL)
+                dataToPass->retain();
+            
             SEL_CallFuncND sel = NDKHelper::selectorList[i].getSelector();
             CCNode *target = NDKHelper::selectorList[i].getTarget();
             
