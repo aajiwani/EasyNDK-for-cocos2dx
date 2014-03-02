@@ -196,9 +196,7 @@ void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
             SEL_CallFuncND sel = NDKHelper::selectorList[i].getSelector();
             CCNode *target = NDKHelper::selectorList[i].getTarget();
             
-            CCFiniteTimeAction* action = CCSequence::create(CCCallFuncND::create(target, sel, (void*)dataToPass), NULL);
-            
-            target->runAction(action);
+            CCCallFuncND::create(target, sel, (void*)dataToPass)->execute();
             
             if (dataToPass != NULL)
                 dataToPass->autorelease();
