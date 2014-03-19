@@ -11,26 +11,52 @@
 #define __CALLED_METHOD__           "calling_method_name"
 #define __CALLED_METHOD_PARAMS__    "calling_method_params"
 
-vector<NDKCallbackNode> NDKHelper::selectorList;
+NDKHelper *NDKHelper::_sharedHelper = NULL;
 
-void NDKHelper::AddSelector(const char *groupName, const char *name, SEL_CallFuncND selector, CCNode* target)
+NDKHelper *NDKHelper::SharedHelper()
 {
-    NDKHelper::selectorList.push_back(NDKCallbackNode(groupName, name, selector, target));
+	if(_sharedHelper == NULL) {
+		_sharedHelper = NDKHelper::create();
+		_sharedHelper->retain();
+	}
+	return _sharedHelper;
+}
+
+void NDKHelper::DestroyHelper()
+{
+	CC_SAFE_RELEASE_NULL(_sharedHelper);
+}
+
+bool NDKHelper::init()
+{
+	callfuncs = CCArray::create();
+	callfuncs->retain();
+	return true;
+}
+
+NDKHelper::~NDKHelper()
+{
+	callfuncs->release();
+}
+
+void NDKHelper::AddSelector(const char *groupName, const char *name, SEL_CallFuncO selector, CCObject* target)
+{
+    selectorList.push_back(NDKCallbackNode(groupName, name, selector, target));
 }
 
 void NDKHelper::RemoveAtIndex(int index)
 {
-    NDKHelper::selectorList[index] = NDKHelper::selectorList.back();
-    NDKHelper::selectorList.pop_back();
+    selectorList[index] = NDKHelper::selectorList.back();
+    selectorList.pop_back();
 }
 
 void NDKHelper::RemoveSelectorsInGroup(char *groupName)
 {
     std::vector<int> markedIndices;
     
-    for (unsigned int i = 0; i < NDKHelper::selectorList.size(); ++i)
+    for (unsigned int i = 0; i < selectorList.size(); ++i)
     {
-        if (NDKHelper::selectorList[i].getGroup().compare(groupName) == 0)
+        if (selectorList[i].getGroup().compare(groupName) == 0)
         {
             markedIndices.push_back(i);
         }
@@ -38,7 +64,7 @@ void NDKHelper::RemoveSelectorsInGroup(char *groupName)
     
     for (unsigned int i = 0; i < markedIndices.size(); ++i)
     {
-        NDKHelper::RemoveAtIndex(markedIndices[i]);
+        RemoveAtIndex(markedIndices[i]);
     }
 }
 
@@ -120,6 +146,10 @@ CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
         //CCString::create(str.str());
         return ccString;
     }
+	else if (json_is_null(obj)) 
+	{
+		return new CCString("null");
+	}
     
     return NULL;
 }
@@ -163,16 +193,23 @@ json_t* NDKHelper::GetJsonFromCCObject(CCObject* obj)
         
         return jsonString;
     }
+	else if(dynamic_cast<CCInteger*>(obj)) 
+	{
+		CCInteger *mainInteger = (CCInteger*) obj;
+		json_t* jsonString = json_integer(mainInteger->getValue());
+
+		return jsonString;
+	}
     
     return NULL;
 }
 
 void NDKHelper::PrintSelectorList()
 {
-    for (unsigned int i = 0; i < NDKHelper::selectorList.size(); ++i)
+    for (unsigned int i = 0; i < selectorList.size(); ++i)
     {
-        string s = NDKHelper::selectorList[i].getGroup();
-        s.append(NDKHelper::selectorList[i].getName());
+        string s = selectorList[i].getGroup();
+        s.append(selectorList[i].getName());
         CCLog(s.c_str());
     }
 }
@@ -184,19 +221,20 @@ void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
     
     const char *methodNameStr = json_string_value(methodName);
     
-    for (unsigned int i = 0; i < NDKHelper::selectorList.size(); ++i)
+    for (unsigned int i = 0; i < selectorList.size(); ++i)
     {
-        if (NDKHelper::selectorList[i].getName().compare(methodNameStr) == 0)
+        if (selectorList[i].getName().compare(methodNameStr) == 0)
         {
             CCObject *dataToPass = NDKHelper::GetCCObjectFromJson(methodParams);
             
             if (dataToPass != NULL)
                 dataToPass->retain();
             
-            SEL_CallFuncND sel = NDKHelper::selectorList[i].getSelector();
-            CCNode *target = NDKHelper::selectorList[i].getTarget();
+            SEL_CallFuncO sel = selectorList[i].getSelector();
+            CCObject *target = selectorList[i].getTarget();
             
-            CCCallFuncND::create(target, sel, (void*)dataToPass)->execute();
+			callfuncs->addObject(CCCallFuncO::create(target, sel, dataToPass));
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(NDKHelper::ExecuteCallfuncs), this, 0, 0, 0, false);
             
             if (dataToPass != NULL)
                 dataToPass->autorelease();
@@ -244,7 +282,7 @@ extern "C"
         // Just to see on the log screen if messages are propogating properly
         __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, jsonCharArray);
         
-        NDKHelper::HandleMessage(jsonMethodName, jsonMethodParams);
+        NDKHelper::SharedHelper()->HandleMessage(jsonMethodName, jsonMethodParams);
         json_decref(root);
     }
     #endif
@@ -302,4 +340,14 @@ extern "C"
         
         json_decref(toBeSentJson);
     }
+}
+
+void NDKHelper::ExecuteCallfuncs( float dt )
+{
+	CCObject *obj;
+	CCARRAY_FOREACH(callfuncs, obj) {
+		CCCallFuncND *callfunc = (CCCallFuncND*) obj;
+		callfunc->execute();
+	}
+	callfuncs->removeAllObjects();
 }

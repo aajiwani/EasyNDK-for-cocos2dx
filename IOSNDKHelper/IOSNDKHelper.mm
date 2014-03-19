@@ -3,6 +3,7 @@
 //  EasyNDK-for-cocos2dx
 //
 //  Created by Amir Ali Jiwani on 23/02/2013.
+//	Modified by Naël MSKINE on 19/03/2014
 //
 //
 
@@ -131,7 +132,7 @@ void IOSNDKHelperImpl::RecieveCPPMessage(json_t *methodName, json_t *methodParam
         jsonPrmsString = nil;
     }
     
-    NDKHelper::HandleMessage(jsonMethod, jsonPrms);
+    NDKHelper::SharedHelper()->HandleMessage(jsonMethod, jsonPrms);
     json_decref(jsonMethod);
     
     if (jsonPrms)

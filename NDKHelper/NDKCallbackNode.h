@@ -17,17 +17,17 @@ using namespace std;
 class NDKCallbackNode
 {
     private :
-    SEL_CallFuncND sel;
+    SEL_CallFuncO sel;
     string name;
     string groupName;
-    CCNode *target;
+    CCObject *target;
     
     public :
-    NDKCallbackNode(const char *groupName, const char *name, SEL_CallFuncND sel, CCNode *target);
+    NDKCallbackNode(const char *groupName, const char *name, SEL_CallFuncO sel, CCObject *target);
     string getName();
     string getGroup();
-    SEL_CallFuncND getSelector();
-    CCNode* getTarget();
+    SEL_CallFuncO getSelector();
+    CCObject* getTarget();
 };
 
 #endif /* defined(__EasyNDK_for_cocos2dx__NDKCallbackNode__) */
