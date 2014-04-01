@@ -346,7 +346,7 @@ void NDKHelper::ExecuteCallfuncs( float dt )
 {
 	CCObject *obj;
 	CCARRAY_FOREACH(callfuncs, obj) {
-		CCCallFuncND *callfunc = (CCCallFuncND*) obj;
+		CCCallFuncO *callfunc = (CCCallFuncO*) obj;
 		callfunc->execute();
 	}
 	callfuncs->removeAllObjects();
