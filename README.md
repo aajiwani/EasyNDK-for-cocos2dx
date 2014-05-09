@@ -7,6 +7,6 @@ I started to modify this framework because I was wondering EasyNDK was working C
 
 I improved the original project and I'm planning to adapt it to Cocos2d-X 3 (you can see a branch which is under developement).
 
-I'm also planning to adapt EasyNDK for Windows Phone 8 which is the 3rd popular mobile platform.
+I'm also planning to adapt EasyNDK for Windows Phone 8 which is the 3rd popular mobile platform and Win32 MOCs to let us develop under Windows without modifications.
 
 I will explain more my thoughts when I will have more time but keep this project starred!
