@@ -3,6 +3,7 @@
 //  EasyNDK-for-cocos2dx
 //
 //  Created by Amir Ali Jiwani on 23/02/2013.
+//	Modified by Naël MSKINE on 19/03/2014
 //
 //
 
@@ -18,20 +19,31 @@
 USING_NS_CC;
 using namespace std;
 
-class NDKHelper
+class NDKHelper : public CCObject
 {
-    private :
-        static vector<NDKCallbackNode> selectorList;
-        //static CCDictionary* GetDict(json_t *dictionary);
-        static void RemoveAtIndex(int index);
+public :
+	static NDKHelper *SharedHelper();
+	static void DestroyHelper();
 
-    public :
-        static void AddSelector(const char *groupName, const char *name, SEL_CallFuncND selector, CCNode* target);
-        static void RemoveSelectorsInGroup(char *groupName);
-        static void PrintSelectorList();
-        static CCObject* GetCCObjectFromJson(json_t *obj);
-        static json_t* GetJsonFromCCObject(CCObject* obj);
-        static void HandleMessage(json_t *methodName, json_t* methodParams);
+	static CCObject* GetCCObjectFromJson(json_t *obj);
+	static json_t* GetJsonFromCCObject(CCObject* obj);
+
+    void AddSelector(const char *groupName, const char *name, SEL_CallFuncO selector, CCObject* target);
+    void RemoveSelectorsInGroup(char *groupName);
+    void PrintSelectorList();
+	void HandleMessage(json_t *methodName, json_t* methodParams);
+
+protected:
+	CREATE_FUNC(NDKHelper);
+	virtual bool init();
+	virtual ~NDKHelper();
+	void RemoveAtIndex(int index);
+	void ExecuteCallfuncs(float dt);
+
+protected:
+	static NDKHelper *_sharedHelper;
+	vector<NDKCallbackNode> selectorList;
+	CCArray *callfuncs;
 };
 
 extern "C"
